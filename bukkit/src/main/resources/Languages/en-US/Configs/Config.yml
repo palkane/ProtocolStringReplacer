@@ -1,0 +1,96 @@
+# Don't edit Configs-Version manually!
+Configs-Version: 6
+
+Options:
+  # Locale language. Will search for specified .yml file in ProtocolStringReplacer/Locales.
+  # This setting also involve some internal operations, so it's recommended to
+  # follow the specification: language(Lower case)-location(Upper case)
+  Locale: en-US
+
+  # Set the host of update server, if you need.
+  Git-Raw-Host: 'raw.githubusercontent.com'
+
+  # Set the lifecycle when PSR load the configs. Accepts INIT (Earliest), LOAD (Medium), ENABLE (Latest and default).
+  # Mainly used for Console messages modify.
+  Config-Load-LifeCycle: 'ENABLE'
+
+  # How many times will PSR print stack traces from the embedded protocol layer? Set 0 to disable it.
+  ProtocolLib-Side-Stack-Print-Count: 3
+
+  # Set the maximum capture records stored in /psr capture list.
+  Max-Capture-Records: 100
+
+  Features:
+    # Enable command typing sound in game.
+    Command-Typing-Sound-Enabled: true
+
+    # Console related options.
+    Console:
+      # Show loaded replacer configs in console.
+      Print-Replacer-Config-When-Loaded: true
+      # Reset console color after a record is ended.
+      # You may enable this if you modify console color.
+      Reset-Console-Color-At-End: true
+
+    # Custom plugin placeholder format. It is recommended to use the format that players can't think of,
+    # so they cannot access some information that they should not be obtained.
+    # By default, you can use the format with ｛player_name｝(Chinese character) to use the placeholder.
+    # You may need to edit them for convenient usage.
+    Placeholder:
+      # Enable PlaceholderAPI features. Disable if you don't need placeholder parsing.
+      Placeholder-Enabled: true
+      # The prefix of a placeholder. Only one character allowed.
+      Placeholder-Head: ｛
+      # The suffix of a placeholder. Only one character allowed.
+      Placeholder-Tail: ｝
+      # Whether PSR should parse placeholders for console or not.
+      Parse-For-Console: true
+
+    # Replaced ItemStack cache related options.
+    ItemMetaCache:
+      # Seconds to execute the task of purging the cache.
+      Purge-Task-Interval: 600
+      # Only Purge the cache entries that have not been accessed in these seconds.
+      Purge-Access-Interval: 300
+      # Remove cache NBT on items when trading with villagers/wandering traders
+      # to fix some glitch.
+      Remove-Cache-When-Merchant-Trade: false
+
+    # Packet listener related options.
+    Packet-Listener:
+      # Specify the listener priority of ProtocolStringReplacer.
+      # If PSR conflicts with another packet-handling plugin, please change this value.
+      Listener-Priority: HIGHEST
+      # Should PSR forcibly edit the data in packets that are not allowed to be written?
+      # It's ok to set it to true.
+      Force-Replace: false
+      # Set which listen types are enabled. If you don't need PSR to handle the strings in
+      # the listen type, set it to false can help with performance.
+      Listen-Type-Enabled:
+        ActionBar: true
+        Boss-Bar: true
+        Chat: true
+        Chat-Preview: true
+        Combat-Kill: true
+        Entity: true
+        ItemStack: true
+        Kick-Disconnect: true
+        ScoreBoard: true
+        Sign: true
+        Tab-Complete: true
+        Title: true
+        Window-Title: true
+
+    # Chat packets options
+    Chat-Packet:
+      # Only for 1.19+ . PSR needs this enabled to handle the chat messages from players.
+      # When enabled, PSR will convert all PLAYER_CHAT packets to SYSTEM_CHAT,
+      # to solve the problem that the chat messages from player don't display
+      # if server/client enabled "Only Show Secure Chat".
+      # NOTE: This affects detection of player chat on clients. E.g, you will not able to report other players via chat.
+      Convert-Player-Chat: true
+
+    # Options about Optimization of replace modes.
+    Replace-Mode:
+      # After replacement in Direct mode, skip all processing for this packet.
+      Skip-When-Direct-Replaced: true

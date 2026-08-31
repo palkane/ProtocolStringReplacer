@@ -1,0 +1,92 @@
+# 请勿手动修改Configs-Version值!
+Configs-Version: 6
+
+Options:
+  # 本地语言. 将在 ProtocolStringReplacer/Locales 中寻找对应 yml 文件.
+  # 此设定也涉及一些内部操作, 建议按照规范 语言缩写(小写)-地区缩写(大写) 来填写.
+  Locale: zh-CN
+
+  # 设置检测更新服务器的域名. 默认为 'raw.githubusercontent.com'.
+  # 若连接不上此加速线路, 应自行选择其它加速线路.
+  Git-Raw-Host: 'ghfast.top/https://raw.githubusercontent.com'
+
+  # 设置 PSR 加载配置的时期. 可选 INIT (最早), LOAD (中), ENABLE (最晚, 默认值).
+  # 主要用于控制台消息的修改.
+  Config-Load-LifeCycle: 'ENABLE'
+
+  # PSR 会显示多少次由内置协议层导致的报错? 设置为 0 为永久禁止.
+  ProtocolLib-Side-Stack-Print-Count: 3
+
+  # 设置 /psr capture list 最多储存多少条捕获记录.
+  Max-Capture-Records: 100
+
+  Features:
+    # 启用游戏内指令输入音效.
+    Command-Typing-Sound-Enabled: true
+
+    # 控制台相关设定.
+    Console:
+      # 在控制台内显示加载的替换配置文件.
+      Print-Replacer-Config-When-Loaded: true
+      # 在记录结束后重置控制台颜色.
+      # 如果您的配置对色彩进行了修改, 您可能需要开启此设定.
+      Reset-Console-Color-At-End: true
+
+    # 自定义插件占位符的使用格式. 建议使用玩家想不到的格式
+    # 以防止玩家通过占位符获取到不该获取的信息.
+    # 在默认值下, 使用如｛player_name｝的格式来获取占位符的变量.
+    Placeholder:
+      # 启用 PlaceholderAPI 功能. 如果您不需要解析占位符, 可以关闭此功能.
+      Placeholder-Enabled: true
+      # 使用占位符的前缀. 仅允许一个字符.
+      Placeholder-Head: ｛
+      # 使用占位符的后缀. 仅允许一个字符.
+      Placeholder-Tail: ｝
+      # 是否为显示在控制台的文本解析占位符.
+      Parse-For-Console: true
+
+    # 关于已替换物品缓存表的相关设定.
+    ItemMetaCache:
+      # 每多少秒执行一次清理缓存的任务.
+      Purge-Task-Interval: 600
+      # 只清理多少秒未读取过的缓存条目.
+      Purge-Access-Interval: 300
+      # 在与村民/流浪商人交易时移除物品上的NBT缓存
+      # 以解决部分小故障.
+      Remove-Cache-When-Merchant-Trade: false
+
+    # 关于网络数据包监听器的相关设定.
+    Packet-Listener:
+      # 定义 ProtocolStringReplacer 监听数据包全局优先度.
+      # 如果与其他发包插件产生冲突, 请修改该值.
+      Listener-Priority: HIGHEST
+      # 是否强行修改不允许修改的数据包.
+      Force-Replace: false
+      # 设定启用哪些类型的监听. 若某种类型中的文本不需要修改, 可设为 false 以优化性能.
+      Listen-Type-Enabled:
+        ActionBar: true
+        Boss-Bar: true
+        Chat: true
+        Chat-Preview: true
+        Combat-Kill: true
+        Entity: true
+        ItemStack: true
+        Kick-Disconnect: true
+        ScoreBoard: true
+        Sign: true
+        Tab-Complete: true
+        Title: true
+        Window-Title: true
+
+    # 聊天数据包的相关设定.
+    Chat-Packet:
+      # 仅适用于 1.19+ . 必须启用此功能 PSR 才能处理玩家发送的消息.
+      # 启用后, PSR 会转换所有 PLAYER_CHAT 数据包为 SYSTEM_CHAT,
+      # 以解决服务端/客户端开启“仅显示安全的聊天”后消息无法显示的问题.
+      # 注意: 这会影响到客户端对玩家聊天的检测. 例如, 您将无法通过聊天来举报其他玩家.
+      Convert-Player-Chat: true
+
+    # 有关替换模式优化的相关设定.
+    Replace-Mode:
+      # 在直观(Direct)替换模式成功替换后, 跳过对这个数据包所有的处理.
+      Skip-When-Direct-Replaced: true

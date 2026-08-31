@@ -1,0 +1,140 @@
+# 本配置文件展示了大多数常用的设定选项, 供您了解.
+# !!! 如果您直接修改本配置的替换/屏蔽项, 它将不会生效 !!!
+# 因为我们限制了生效所需的权限、客户端语言. 请前往 70 行查看它们.
+
+# 此替换配置文件的相关设定.
+Options:
+  # 是否开启本替换配置. 若为false则不会为这个文件处理. 若未定义, 默认为false.
+  Enabled: true
+  # 本文件的优先级. 若有多个替换配置, 优先级高的最早替换. 默认为5.
+  Priority: 5
+  # 可选参数
+  Version: '1.230201'
+  # 可选参数
+  Author: 'Rothes'
+  # 匹配字符串的方式. 可选值:
+  # 'Contain' : 只要包含就替换 (默认)
+  # 'Equal' : 要求设置与原字符串完全匹配
+  # 'Regex' : 使用Java正则表达式
+  # 不区分大小写.
+  Match-Mode: 'Contain'
+  # 筛选功能. 用于指定此文件处理字符串的条件.
+  Filter:
+    # 监听类型.
+    # 指定处理何处的字符串. 默认为全部. 可选值:
+    # 'ActionBar' : 处理动作栏信息文本
+    # 'Chat' : 处理聊天信息文本
+    # 'Chat-Preview' : 处理聊天预览(Chat Preview)中的文本
+    # 'Tab-Complete' : 处理 Tab Complete 中的文本
+    # 'Sign' : 处理告示牌文本
+    # 'Title' : 处理标题(title|subtitle)文本
+    # 'Entity' : 处理实体名文本
+    # 'Boss-Bar' : 处理Boss血量条文本
+    # 'ItemStack' : 处理物品(物品名|Lore|书署名|书内容)文本
+    # 'Window-Title' : 处理容器标题文本
+    # 'ScoreBoard' : 处理计分板(标题|实体名称)
+    # 'Console' : 处理控制台内显示的文本信息
+    # 'Kick-Disconnect' : 处理踢出玩家时客户端上的踢出消息
+    # 'Combat-Kill' : 处理玩家重生界面上的死亡信息
+    # 不区分大小写.
+    Listen-Types:
+      - Chat
+      - Window-Title
+      - ItemStack
+      - Sign
+    # 针对计分板监听的特定过滤
+    ScoreBoard:
+      # 是否处理计分板标题. 默认为false.
+      Handle-Title: false
+      # 是否处理计分板中的实体名称. 默认为false.
+      # 注: 对于玩家, 实体名称为玩家名称; 对于非玩家则为UUID.
+      Handle-Entity-Name: false
+      # 是否处理计分板中的团队显示名称. 默认为false.
+      Handle-Team-Display-Name: false
+      # 是否处理计分板中的团队显示前缀. 默认为false.
+      Handle-Team-Prefix: false
+      # 是否处理计分板中的团队显示后缀. 默认为false.
+      Handle-Team-Suffix: false
+    # 针对物品监听的特定过滤
+    ItemStack:
+      # 仅 Json. 是否处理物品的完整 nbt. 默认为false.
+      Handle-Nbt-Compound: false
+      # 仅 Json. 是否处理物品的 Lore nbt 列表. 默认为false.
+      Handle-Nbt-Lore-List: false
+      # 是否处理物品的 Display nbt 组件中的各个元素. 默认为true.
+      Handle-Nbt-Display-Entries: true
+      # 过滤要处理的物品类型. 若设为 null 或空列表, 则会处理所有物品.
+      # 否则, PSR 只会处理此处列出的物品类型.
+      Handle-Item-Types:
+        - DIRT
+        - STONE
+    User:
+      # 处理所需权限. 若设定, 用户必须拥有该权限
+      # 才能使该替换配置为其生效.
+      Permission: 'example.permission.1'
+      # 所需客户端语言. 只会为在下面列出的客户端语言处理.
+      # 设为空列表或者移除以跳过语言检查.
+      # 语言列表: https://minecraft.fandom.com/wiki/Language#Languages
+      Locales:
+        - en_us  # English (US)
+        - en_gb  # English (UK)
+        - zh_cn  # 简体中文（中国大陆）
+        - zh_hk  # 繁體中文（香港特別行政區）
+        - zh_tw  # 繁體中文（台灣）
+        - lzh    # 文言（華夏）
+    # PSR 将忽略长度超过此处定义值的字符串(但不是整个数据包)处理.
+    # 设为 -1 以禁用此功能.
+    Max-Length:
+      # 常规文本. (或者 Common)
+      Text: -1
+      # Json.
+      Json: -1
+      # Direct. 直观替换模式.
+      Direct: -1
+
+# 替换的字符串列表.
+# 替换模式优先度: Direct > Json > Common, 忽略文件优先度.
+# 提示: 您可以使用 /psr capture 指令以快速抓取准确的原字符串.
+Replaces:
+  # 常规文本替换模式.
+  # 常规替换模式中的每个条目根据 Json 中的不同格式分割.
+  # 使用常规模式的一大好处就是它不会破坏组件中的格式.
+  Common:
+    - Original: '我的名字'
+      Replacement: '｛player_name｝'
+    - Original: '一个命名牌'
+      Replacement: '我的命名牌'
+    - Original: '这样来换行'
+      Replacement: |-
+        这样
+        来换行
+  # Json 替换模式, 适合高级用户.
+  # 不支持使用 Json 替换的监听类型有:
+  # ItemStack(版本1.12及以上书内容除外)、控制台消息,
+  # 以及计分板中的实体名称、版本1.12及以下的计分板标题.
+  Json:
+    # 修改客户端上熔炉界面标题显示的名称.
+    - Original: '{"translate":"container.furnace"}'
+      Replacement: '{"text":"恭喜您打开了一个熔炉! 666!"}'
+  # 直观替换模式. 适合不熟悉 Json 替换的用户.
+  # 默认情况下, 若直观模式替换过任何内容, Json 和常规文本替换模式
+  # 将不再对该数据包生效. 您可以在 Config.yml 中调整此设定.
+  # 除 Json 外, 这也是支持 1.16+ HEX 的替换模式.
+  # 注意: 如果直观替换模式替换过文本, 它将破坏 Json 中的非文本组件显示效果.
+  # ^ 这意味着替换后(如果有的话)会产生消息会无法点击，
+  # ^ 移除鼠标悬停信息、翻译效果等副作用.
+  Direct:
+    - Original: '§f<§f§4Rothes§f> §f我正在聊天'
+      Replacement: '§7* Rothes 正在聊天'
+
+# 屏蔽的字符串列表. 如果一个数据包中的任何字符串被匹配,
+# 这整个数据包将被屏蔽发送给玩家.
+# 此功能同样适用于控制台消息.
+Blocks:
+  Common:
+    - '这条消息会被屏蔽'
+    - '这条同样也会'
+  Json:
+    - '{"text":"这条json会被屏蔽"}'
+  # 空列表.
+  Direct: []

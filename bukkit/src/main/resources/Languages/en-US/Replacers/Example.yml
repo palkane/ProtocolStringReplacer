@@ -1,0 +1,138 @@
+# This configuration file shows most of the options we have. You can have a check.
+# !!! If you directly modify the Replaces/Blocks entries of this configuration, it will not take effect !!!
+# Because we have limited the permissions and client locales required to take effect. Please go to line 72 to view them.
+
+# The options of this replacer config.
+Options:
+  # Whether this config is enabled or not. Plugin will not process this config
+  # if configured false. By default, it's false if undefined.
+  Enabled: true
+  # Priority of this config. If there are multiple replacer configs,
+  # the higher priority, the earlier replaces. Default is 5.
+  Priority: 5
+  # Optional parameter.
+  Version: '1.230201'
+  # Optional parameter.
+  Author: 'Rothes'
+  # The method PSR will use to match the strings. Options:
+  # 'Contain' : Replace all contained (Default)
+  # 'Equal' : The original string must equal you set
+  # 'Regex' : Use Java Regex
+  # This is not case-sensitive.
+  Match-Mode: 'Contain'
+  # Filter function. Used to specify the conditions for strings handling in this config.
+  Filter:
+    # Listen types.
+    # Specify which strings to handle. All are included by default. Options:
+    # 'ActionBar': Handle strings in ActionBar
+    # 'Chat' : Handle strings in chat
+    # 'Chat-Preview' : Handle strings in Chat Preview
+    # 'Tab-Complete' : Handle strings in Tab Complete
+    # 'Sign' : Handle strings on signs
+    # 'Title' : Handle strings in title|subtitle
+    # 'Entity' : Handle strings of entity display name, itemframe name, etc.
+    # 'Boss-Bar' : Handle strings of Boss health bar
+    # 'ItemStack' : Handle strings in item such as display name|Lore|author of the book|content of the book
+    # 'Window-Title' : Handle strings of containers name
+    # 'ScoreBoard' : Handle strings in scoreboard title|entity name
+    # 'Console' : Handle strings in console
+    # 'Kick-Disconnect' : Handle strings in kick message on client when kicking player
+    # 'Combat-Kill' : Handle strings in death message on respawn screen
+    # This is not case-sensitive.
+    Listen-Types:
+      - Chat
+      - Window-Title
+      - ItemStack
+      - Sign
+    # Specific filtering for scoreboard handling.
+    ScoreBoard:
+      # Whether handle scoreboard title. Default is false.
+      Handle-Title: false
+      # Whether handle the name of the entities in scoreboard. Default is false.
+      # Note: For players, entity name is player's name, else is entity UUID.
+      Handle-Entity-Name: false
+      # Whether handle the display name of the teams in scoreboard. Default is false.
+      Handle-Team-Display-Name: false
+      # Whether handle the prefix of the teams in scoreboard. Default is false.
+      Handle-Team-Prefix: false
+      # Whether handle the suffix of the teams in scoreboard. Default is false.
+      Handle-Team-Suffix: false
+    # Specific filtering for item-stack handling.
+    ItemStack:
+      # Json only. Whether handle the whole nbt of the item. Default is false.
+      Handle-Nbt-Compound: false
+      # Json only. Whether handle the Lore nbt of the item. Default is false.
+      Handle-Nbt-Lore-List: false
+      # Whether handle each entry of the display nbt of the item. Default is true.
+      Handle-Nbt-Display-Entries: true
+      # Filter for the item type. If set to null or empty list, will handle all the items.
+      # Otherwise, PSR will only handle the items list here.
+      Handle-Item-Types:
+        - DIRT
+        - STONE
+    User:
+      # Required permission. If set, user must have this permission
+      # to make this replacer config take effects.
+      Permission: 'example.permission.1'
+      # Required client locales. Will only handle for the listed locales here.
+      # Set it to an empty list or null to skip the check.
+      # Locale list: https://minecraft.fandom.com/wiki/Language#Languages
+      Locales:
+        - en_us  # English (US)
+        - en_gb  # English (UK)
+    # PSR will ignore the string (but not the whole packet) whose length exceeds the number defined here.
+    # Set -1 to disable the feature.
+    Max-Length:
+      # Text. (Or Common)
+      Text: -1
+      # Json.
+      Json: -1
+      # Direct.
+      Direct: -1
+
+# List of replace strings.
+# Replace mode priority: Direct > Json > Common. This ignores priority in replacer configs.
+# Tip: You can use `/psr capture` command to capture the exact original strings fast.
+Replaces:
+  # Common string replace mode.
+  # Each entry in a common replace mode is split according to a different format in Json.
+  # One of the great benefits of using common mode is that it doesn't break formatting of components.
+  Common:
+    - Original: 'My name'
+      Replacement: '｛player_name｝'
+    - Original: 'a nametag'
+      Replacement: 'my nametag!'
+    - Original: 'in this way to add new line'
+      Replacement: |-
+        in this way
+        to add new line
+  # Json replace mode, for advanced users.
+  # The listen types that doesn't support Json replace:
+  # ItemStack(Except content of the book on 1.12 and upper server)、Console messages,
+  # entity name in ScoreBoard、Scoreboard title in ScoreBoard on server version 1.12 or below 1.12.
+  Json:
+    # This can modify the furnace title on players' client.
+    - Original: '{"translate":"container.furnace"}'
+      Replacement: '{"text":"Congratulations for opening a furnace! Nice job!"}'
+  # Direct replace mode. Suitable for users who are not familiar with Json replacement.
+  # By default, If any content is replaced here, Json and Common replace modes
+  # will no longer take effect for this packet. You can disable it in Config.yml.
+  # In addition to Json, this also supports 1.16+ HEX.
+  # Note: If direct replace mod replaced the string, it will break non-text component display in Json.
+  # ^ This means that after the replacement the message will cause the side effects that the message being
+  # ^ not clickable, remove mouseover display and translation effects, etc. (if it originally has)
+  Direct:
+    - Original: '§f<§f§4Rothes§f> §fim chatting'
+      Replacement: '§7* Rothes is chatting'
+
+# The string list to block. If any string in a packet is matched by these,
+# PSR will block the entire packet sending to the player.
+# This feature also applies to console messages.
+Blocks:
+  Common:
+    - 'This message will be blocked'
+    - 'Also this message!'
+  Json:
+    - '{"text":"This Json will be blocked"}'
+  # Empty list.
+  Direct: []
