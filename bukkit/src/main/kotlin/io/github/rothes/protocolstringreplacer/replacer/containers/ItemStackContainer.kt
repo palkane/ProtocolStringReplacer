@@ -1,6 +1,7 @@
 package io.github.rothes.protocolstringreplacer.replacer.containers
 
 import de.tr7zw.nbtapi.NBT
+import de.tr7zw.nbtapi.NBTCompoundList
 import de.tr7zw.nbtapi.NBTContainer
 import de.tr7zw.nbtapi.NBTType
 import de.tr7zw.nbtapi.iface.ReadWriteNBT
@@ -224,8 +225,15 @@ class ItemStackContainer @JvmOverloads constructor(itemStack: ItemStack, useCach
                 override fun getResult(): String {
                     val result = super.getResult()
                     if (string != result) {
-                        compound.clearNBT()
-                        compound.mergeCompound(NBT.parseNBT(result))
+                        val replacement = NBT.parseNBT(result)
+                        if (list is NBTCompoundList) {
+                            list.remove(line)
+                            list.add(line, null)
+                            list[line].mergeCompound(replacement)
+                        } else {
+                            compound.clearNBT()
+                            compound.mergeCompound(replacement)
+                        }
                     }
                     return result
                 }

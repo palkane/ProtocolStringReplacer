@@ -88,5 +88,7 @@ Options:
 
     # 有关替换模式优化的相关设定.
     Replace-Mode:
+      # 自动解析文本中的 MiniMessage 标签，例如 <white>、<#ff8800> 和 <bold>。
+      Parse-MiniMessage-Tags: true
       # 在直观(Direct)替换模式成功替换后, 跳过对这个数据包所有的处理.
       Skip-When-Direct-Replaced: true

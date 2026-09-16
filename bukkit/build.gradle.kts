@@ -25,6 +25,8 @@ dependencies {
     compileOnly("net.minecrell:terminalconsoleappender:1.3.0")
     compileOnly("com.mojang:brigadier:1.0.18")
     compileOnly("commons-lang:commons-lang:2.6")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 val fileName = "${rootProject.name}-${project.name}"
@@ -71,6 +73,10 @@ tasks {
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
+
     build {
         dependsOn(shadowJar)
     }

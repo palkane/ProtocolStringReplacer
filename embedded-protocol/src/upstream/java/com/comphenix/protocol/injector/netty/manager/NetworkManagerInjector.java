@@ -29,7 +29,7 @@ import io.netty.channel.ChannelFuture;
 
 public class NetworkManagerInjector {
 
-    private static final String INBOUND_INJECT_HANDLER_NAME = "protocol_lib_inbound_inject";
+    private static final String INBOUND_INJECT_HANDLER_NAME = "psr_embedded_protocol_inbound_inject";
 
     // all list fields which we've overridden and need to revert to a non-proxying list afterwards
     private final Set<Pair<Object, FieldAccessor>> overriddenLists = new HashSet<>();

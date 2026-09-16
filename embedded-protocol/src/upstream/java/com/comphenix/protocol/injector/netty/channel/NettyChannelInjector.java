@@ -50,9 +50,9 @@ import io.netty.util.AttributeKey;
 
 public class NettyChannelInjector implements Injector {
 
-    private static final String INBOUND_INTERCEPTOR_NAME = "protocol_lib_inbound_interceptor";
-    private static final String INBOUND_PROTOCOL_GETTER_NAME = "protocol_lib_inbound_protocol_getter";
-    private static final String WIRE_PACKET_ENCODER_NAME = "protocol_lib_wire_packet_encoder";
+    private static final String INBOUND_INTERCEPTOR_NAME = "psr_embedded_protocol_inbound_interceptor";
+    private static final String INBOUND_PROTOCOL_GETTER_NAME = "psr_embedded_protocol_inbound_protocol_getter";
+    private static final String WIRE_PACKET_ENCODER_NAME = "psr_embedded_protocol_wire_packet_encoder";
 
     // all registered channel handlers to easier make sure we unregister them all from the pipeline
     private static final String[] NETTY_HANDLER_NAMES = new String[]{

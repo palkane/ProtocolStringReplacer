@@ -6,12 +6,12 @@ public enum ListenType {
     CHAT_PREVIEW("Chat-Preview", true),
     TAB_COMPLETE("Tab-Complete", true),
     SIGN("Sign", true),
-    TITLE("Title", true),
+    TITLE("Title", true, true),
     ENTITY("Entity", true),
     BOSS_BAR("Boss-Bar", true),
     ITEMSTACK("ItemStack", true),
-    WINDOW_TITLE("Window-Title", true),
-    SCOREBOARD("ScoreBoard", true),
+    WINDOW_TITLE("Window-Title", true, true),
+    SCOREBOARD("ScoreBoard", true, true),
     CONSOLE("Console", false),
     KICK_DISCONNECT("Kick-Disconnect", true), // Is it important capture-able now? lol
     COMBAT_KILL("Combat-Kill", true),
@@ -19,10 +19,16 @@ public enum ListenType {
 
     private String name;
     private boolean capturable;
+    private final boolean parseMiniMessageTags;
 
     ListenType(String name, boolean capturable) {
+        this(name, capturable, false);
+    }
+
+    ListenType(String name, boolean capturable, boolean parseMiniMessageTags) {
         this.name = name;
         this.capturable = capturable;
+        this.parseMiniMessageTags = parseMiniMessageTags;
     }
 
     public static ListenType getType(String typeName) {
@@ -40,6 +46,10 @@ public enum ListenType {
 
     public boolean isCapturable() {
         return capturable;
+    }
+
+    public boolean shouldParseMiniMessageTags() {
+        return parseMiniMessageTags;
     }
 
 }

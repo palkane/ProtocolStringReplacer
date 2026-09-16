@@ -122,9 +122,14 @@ class ConsoleReplaceManager(private val plugin: ProtocolStringReplacer) {
     private fun replaceReader(config: Configuration, restore: Boolean) {
         try {
             val terminalconsole = getPluginClass(config, "terminalconsole") ?: return
-            val reader = terminalconsole.getDeclaredMethod("getReader").invoke(null) as LineReader
+            val reader = terminalconsole.getDeclaredMethod("getReader").invoke(null) as? LineReader ?: return
+            val replacement = if (restore) {
+                (reader as? PsrWrappedLineReader)?.oriReader ?: return
+            } else {
+                PsrWrappedLineReader(reader)
+            }
             terminalconsole.getDeclaredMethod("setReader", LineReader::class.java).invoke(
-                null, if (restore) (reader as PsrWrappedLineReader).oriReader else PsrWrappedLineReader(reader)
+                null, replacement
             )
         } catch (e: Throwable) {
             e.printStackTrace()

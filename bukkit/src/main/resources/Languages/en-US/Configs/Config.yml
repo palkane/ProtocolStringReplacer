@@ -92,5 +92,7 @@ Options:
 
     # Options about Optimization of replace modes.
     Replace-Mode:
+      # Automatically parse MiniMessage tags such as <white>, <#ff8800>, and <bold>.
+      Parse-MiniMessage-Tags: true
       # After replacement in Direct mode, skip all processing for this packet.
       Skip-When-Direct-Replaced: true

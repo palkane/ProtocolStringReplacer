@@ -33,6 +33,7 @@ public class ConfigManager {
     public final int maxCaptureRecords;
 
     public final boolean directSkips;
+    public final boolean parseMiniMessageTags;
 
     public final String gitRawHost;
     public final boolean resetConsoleColor;
@@ -107,6 +108,7 @@ public class ConfigManager {
         this.removeCacheWhenMerchantTrade = config.getBoolean("Options.Features.ItemMetaCache.Remove-Cache-When-Merchant-Trade", false);
 
         directSkips = config.getBoolean("Options.Features.Replace-Mode.Skip-When-Direct-Replaced", true);
+        parseMiniMessageTags = config.getBoolean("Options.Features.Replace-Mode.Parse-MiniMessage-Tags", true);
         resetConsoleColor = config.getBoolean("Options.Features.Console.Reset-Console-Color-At-End", true);
     }
 

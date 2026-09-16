@@ -20,6 +20,7 @@ import io.github.rothes.protocolstringreplacer.replacer.containers.ChatJsonConta
 import io.github.rothes.protocolstringreplacer.replacer.containers.ItemStackContainer;
 import io.github.rothes.protocolstringreplacer.replacer.containers.Replaceable;
 import io.github.rothes.protocolstringreplacer.replacer.containers.SimpleTextContainer;
+import io.github.rothes.protocolstringreplacer.util.PaperUtils;
 import io.github.rothes.protocolstringreplacer.util.SpigotUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -99,11 +100,12 @@ public abstract class BaseServerPacketListener extends BasePacketListener {
     }
 
     protected static ChatJsonContainer deployContainer(@Nonnull PacketEvent packetEvent, @Nonnull PsrUser user,
-                                                       @Nonnull String json, List<ReplacerConfig> replacers) {
+                                                       @Nonnull String json, List<ReplacerConfig> replacers,
+                                                       boolean parseMiniMessageTags) {
         boolean blocked = false;
         ReplacerManager replacerManager = ProtocolStringReplacer.getInstance().getReplacerManager();
 
-        ChatJsonContainer container = new ChatJsonContainer(json, true);
+        ChatJsonContainer container = new ChatJsonContainer(json, true, parseMiniMessageTags);
 
         container.createJsons(container);
         if (replacerManager.isJsonBlocked(container, replacers)) {
@@ -156,13 +158,15 @@ public abstract class BaseServerPacketListener extends BasePacketListener {
         }
         //noinspection StringEquality
         if (replacedDirect != DIRECT_NOT_REPLACED && plugin.getConfigManager().directSkips) {
-            return SpigotUtils.serializeComponents(TextComponent.fromLegacyText(replacedDirect));
+            return SpigotUtils.serializeComponents(listenType.shouldParseMiniMessageTags(),
+                    TextComponent.fromLegacyText(replacedDirect));
         }
 
         //noinspection StringEquality
         ChatJsonContainer container = deployContainer(packetEvent, user,
                 (replacedDirect != DIRECT_NOT_REPLACED) ?
-                        SpigotUtils.serializeComponents(TextComponent.fromLegacyText(replacedDirect)) : json, replacers);
+                        SpigotUtils.serializeComponents(TextComponent.fromLegacyText(replacedDirect)) : json,
+                replacers, listenType.shouldParseMiniMessageTags());
 
         if (container != null) {
             return container.getResult();
@@ -293,6 +297,22 @@ public abstract class BaseServerPacketListener extends BasePacketListener {
 //            return false;
 //        }
             if (itemStack.getType() == Material.AIR) {
+                return itemStack;
+            }
+
+            if (plugin.getConfigManager().parseMiniMessageTags
+                    && PaperUtils.containsMiniMessageTag(itemStack)) {
+                itemStack = PaperUtils.parseMiniMessageTags(itemStack);
+            }
+
+            // Do not round-trip modern item components when no replacer applies.
+            // On 1.20.5+, an unnecessary NBT/component conversion can turn empty
+            // lore components into visible JSON such as {"text":""}.
+            Material itemType = itemStack.getType();
+            if (!user.isCapturing(listenType)
+                    && matchItemType(nbt, itemType).isEmpty()
+                    && matchItemType(lore, itemType).isEmpty()
+                    && matchItemType(entries, itemType).isEmpty()) {
                 return itemStack;
             }
 

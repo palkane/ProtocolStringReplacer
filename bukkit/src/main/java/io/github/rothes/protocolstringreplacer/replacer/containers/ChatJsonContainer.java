@@ -7,24 +7,38 @@ import org.jetbrains.annotations.NotNull;
 public class ChatJsonContainer extends AbstractContainer<String> {
 
     private boolean createComponents = false;
+    private final boolean parseMiniMessageTags;
     private ComponentsContainer componentsContainer = null;
 
     public ChatJsonContainer(@NotNull String json) {
         super(json);
+        parseMiniMessageTags = false;
     }
 
     public ChatJsonContainer(@NotNull String json, boolean createComponents) {
+        this(json, createComponents, false);
+    }
+
+    public ChatJsonContainer(@NotNull String json, boolean createComponents, boolean parseMiniMessageTags) {
         super(json);
         this.createComponents = createComponents;
+        this.parseMiniMessageTags = parseMiniMessageTags;
     }
 
     public ChatJsonContainer(@NotNull String json, @NotNull Container<?> root) {
         super(json, root);
+        parseMiniMessageTags = false;
     }
 
     public ChatJsonContainer(@NotNull String json, @NotNull Container<?> root, boolean createComponents) {
+        this(json, root, createComponents, false);
+    }
+
+    public ChatJsonContainer(@NotNull String json, @NotNull Container<?> root, boolean createComponents,
+                             boolean parseMiniMessageTags) {
         super(json, root);
         this.createComponents = createComponents;
+        this.parseMiniMessageTags = parseMiniMessageTags;
     }
 
     @Override
@@ -49,7 +63,7 @@ public class ChatJsonContainer extends AbstractContainer<String> {
     @Override
     public String getResult() {
         if (componentsContainer != null) {
-            return SpigotUtils.serializeComponents(componentsContainer.getResult());
+            return SpigotUtils.serializeComponents(parseMiniMessageTags, componentsContainer.getResult());
         } else {
             return super.getResult();
         }

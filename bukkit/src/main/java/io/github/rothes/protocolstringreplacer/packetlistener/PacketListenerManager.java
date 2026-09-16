@@ -41,6 +41,7 @@ import io.github.rothes.protocolstringreplacer.packetlistener.server.scoreboard.
 import io.github.rothes.protocolstringreplacer.packetlistener.server.sign.MapChunk;
 import io.github.rothes.protocolstringreplacer.packetlistener.server.sign.TileEntityData;
 import io.github.rothes.protocolstringreplacer.packetlistener.server.sign.UpdateSign;
+import io.github.rothes.protocolstringreplacer.packetlistener.server.sign.BaseServerSignPacketListener;
 import io.github.rothes.protocolstringreplacer.packetlistener.server.itemstack.SetSlot;
 import io.github.rothes.protocolstringreplacer.packetlistener.server.itemstack.WindowItems;
 import io.github.rothes.protocolstringreplacer.packetlistener.server.itemstack.WindowItemsPost11;
@@ -163,6 +164,11 @@ public class PacketListenerManager {
         }
 
         for (Class<? extends BasePacketListener> listener : listeners) {
+            if (BaseServerSignPacketListener.class.isAssignableFrom(listener)
+                    && !ProtocolStringReplacer.getInstance().getConfig()
+                    .getBoolean("Options.Features.Packet-Listener.Listen-Type-Enabled.Sign", false)) {
+                continue;
+            }
             try {
                 BasePacketListener packetListener = listener.getConstructor().newInstance();
                 packetListener.register();
